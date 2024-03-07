@@ -28,7 +28,7 @@ const Calendar = () => {
     });
   };
 
-  const cancelTimeSlot = (index) => toggleBooking(index, true);
+  const cancelTimeSlot = (index) => toggleBooking(index, "", true);
   return (
     <Container maxW="container.xl" p={4}>
       <VStack spacing={8} align="stretch">
