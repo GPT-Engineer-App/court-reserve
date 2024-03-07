@@ -9,7 +9,8 @@ const Calendar = () => {
     { time: "11 AM - 12 PM", isBooked: false, name: "" },
   ]);
 
-  const toggleBooking = (index, name = "", isCanceling = false) => {
+  const toggleBooking = (index, isCanceling = false) => {
+    const name = isCanceling ? "" : prompt("Please enter your name for the booking:");
     const newTimeSlots = [...timeSlots];
     if (!isCanceling) {
       newTimeSlots[index].name = name;
@@ -46,7 +47,7 @@ const Calendar = () => {
                   </Button>
                 )}
                 {!slot.isBooked && (
-                  <Button ml={4} colorScheme="teal" size="sm" onClick={() => toggleBooking(index)}>
+                  <Button ml={4} colorScheme="teal" size="sm" onClick={() => toggleBooking(index, false)}>
                     Book Now
                   </Button>
                 )}
