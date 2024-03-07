@@ -14,6 +14,11 @@ const NavBar = () => {
           Calendar
         </Link>
       </Box>
+      <Box mx={2}>
+        <Link as={RouterLink} to="/login" px={2}>
+          Login
+        </Link>
+      </Box>
     </Flex>
   );
 };
