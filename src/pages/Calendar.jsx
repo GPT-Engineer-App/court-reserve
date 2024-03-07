@@ -4,13 +4,16 @@ import { useState } from "react";
 const Calendar = () => {
   const toast = useToast();
   const [timeSlots, setTimeSlots] = useState([
-    { time: "9 AM - 10 AM", isBooked: false },
-    { time: "10 AM - 11 AM", isBooked: true },
-    { time: "11 AM - 12 PM", isBooked: false },
+    { time: "9 AM - 10 AM", isBooked: false, name: "" },
+    { time: "10 AM - 11 AM", isBooked: true, name: "John Doe" },
+    { time: "11 AM - 12 PM", isBooked: false, name: "" },
   ]);
 
-  const toggleBooking = (index, isCanceling = false) => {
+  const toggleBooking = (index, name = "", isCanceling = false) => {
     const newTimeSlots = [...timeSlots];
+    if (!isCanceling) {
+      newTimeSlots[index].name = name;
+    }
     newTimeSlots[index].isBooked = !isCanceling;
     setTimeSlots(newTimeSlots);
     const action = isCanceling ? "canceled" : "booked";
@@ -36,7 +39,7 @@ const Calendar = () => {
           <Stack p={4}>
             {timeSlots.map((slot, index) => (
               <Box key={index} p={2} bg={slot.isBooked ? "red.100" : "green.100"}>
-                {slot.time} {slot.isBooked ? "(Booked)" : "(Available)"}
+                {slot.time} {slot.isBooked ? `(Booked by ${slot.name})` : "(Available)"}
                 {slot.isBooked && (
                   <Button ml={4} colorScheme="red" size="sm" onClick={() => cancelTimeSlot(index)}>
                     Cancel

@@ -1,13 +1,16 @@
 import { Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Stack, Text, useToast, VStack, Image } from "@chakra-ui/react";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUser } from "react-icons/fa";
 
+import { useState } from "react";
+
 const Index = () => {
+  const [bookingName, setBookingName] = useState("");
   const toast = useToast();
 
-  const handleBooking = () => {
+  const handleBooking = (name) => {
     // This is a placeholder for the booking logic
     toast({
-      title: "Booking Confirmed!",
+      title: `Booking Confirmed for ${bookingName}!`,
       description: "Your tennis court has been booked.",
       status: "success",
       duration: 9000,
@@ -30,7 +33,7 @@ const Index = () => {
             <Stack spacing={4} as="form">
               <FormControl id="name" isRequired>
                 <FormLabel>Name</FormLabel>
-                <Input placeholder="John Doe" type="text" icon={<FaUser />} />
+                <Input placeholder="John Doe" type="text" icon={<FaUser />} value={bookingName} onChange={(e) => setBookingName(e.target.value)} />
               </FormControl>
               <FormControl id="date" isRequired>
                 <FormLabel>Date</FormLabel>
@@ -40,7 +43,7 @@ const Index = () => {
                 <FormLabel>Location</FormLabel>
                 <Input placeholder="123 Tennis Court St." type="text" icon={<FaMapMarkerAlt />} />
               </FormControl>
-              <Button colorScheme="teal" size="lg" onClick={handleBooking}>
+              <Button colorScheme="teal" size="lg" onClick={() => handleBooking(bookingName)}>
                 Book Now
               </Button>
             </Stack>
