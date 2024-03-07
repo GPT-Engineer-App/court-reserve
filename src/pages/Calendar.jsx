@@ -9,18 +9,23 @@ const Calendar = () => {
     { time: "11 AM - 12 PM", isBooked: false },
   ]);
 
-  const bookTimeSlot = (index) => {
-    let newTimeSlots = [...timeSlots];
-    newTimeSlots[index].isBooked = true;
+  const toggleBooking = (index, isCanceling = false) => {
+    const newTimeSlots = [...timeSlots];
+    newTimeSlots[index].isBooked = !isCanceling;
     setTimeSlots(newTimeSlots);
+    const action = isCanceling ? "canceled" : "booked";
+    const status = isCanceling ? "info" : "success";
+    const title = isCanceling ? "Booking Canceled!" : "Booking Confirmed!";
     toast({
-      title: "Booking Confirmed!",
-      description: `You have booked the time slot: ${newTimeSlots[index].time}`,
-      status: "success",
+      title: title,
+      description: `You have ${action} the time slot: ${newTimeSlots[index].time}`,
+      status: status,
       duration: 5000,
       isClosable: true,
     });
   };
+
+  const cancelTimeSlot = (index) => toggleBooking(index, true);
   return (
     <Container maxW="container.xl" p={4}>
       <VStack spacing={8} align="stretch">
@@ -30,8 +35,13 @@ const Calendar = () => {
         <Box border="1px" borderColor="gray.200">
           <Stack p={4}>
             {timeSlots.map((slot, index) => (
-              <Box key={index} p={2} bg={slot.isBooked ? "red.100" : "green.100"} cursor={slot.isBooked ? "not-allowed" : "pointer"} onClick={() => !slot.isBooked && bookTimeSlot(index)}>
+              <Box key={index} p={2} bg={slot.isBooked ? "red.100" : "green.100"}>
                 {slot.time} {slot.isBooked ? "(Booked)" : "(Available)"}
+                {slot.isBooked && (
+                  <Button ml={4} colorScheme="red" size="sm" onClick={() => cancelTimeSlot(index)}>
+                    Cancel
+                  </Button>
+                )}
                 {!slot.isBooked && (
                   <Button ml={4} colorScheme="teal" size="sm">
                     Book Now
