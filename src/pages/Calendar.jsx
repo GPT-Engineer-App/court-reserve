@@ -43,7 +43,7 @@ const Calendar = () => {
                   </Button>
                 )}
                 {!slot.isBooked && (
-                  <Button ml={4} colorScheme="teal" size="sm">
+                  <Button ml={4} colorScheme="teal" size="sm" onClick={() => toggleBooking(index)}>
                     Book Now
                   </Button>
                 )}
