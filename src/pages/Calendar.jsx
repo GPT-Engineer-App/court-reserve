@@ -1,6 +1,26 @@
-import { Box, Container, Heading, Stack, VStack } from "@chakra-ui/react";
+import { Box, Container, Heading, Stack, VStack, useToast, Button } from "@chakra-ui/react";
+import { useState } from "react";
 
 const Calendar = () => {
+  const toast = useToast();
+  const [timeSlots, setTimeSlots] = useState([
+    { time: "9 AM - 10 AM", isBooked: false },
+    { time: "10 AM - 11 AM", isBooked: true },
+    { time: "11 AM - 12 PM", isBooked: false },
+  ]);
+
+  const bookTimeSlot = (index) => {
+    let newTimeSlots = [...timeSlots];
+    newTimeSlots[index].isBooked = true;
+    setTimeSlots(newTimeSlots);
+    toast({
+      title: "Booking Confirmed!",
+      description: `You have booked the time slot: ${newTimeSlots[index].time}`,
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
   return (
     <Container maxW="container.xl" p={4}>
       <VStack spacing={8} align="stretch">
@@ -9,17 +29,16 @@ const Calendar = () => {
         </Heading>
         <Box border="1px" borderColor="gray.200">
           <Stack p={4}>
-            {}
-            <Box p={2} bg="green.100">
-              9 AM - 10 AM (Available)
-            </Box>
-            <Box p={2} bg="red.100">
-              10 AM - 11 AM (Booked)
-            </Box>
-            <Box p={2} bg="green.100">
-              11 AM - 12 PM (Available)
-            </Box>
-            {}
+            {timeSlots.map((slot, index) => (
+              <Box key={index} p={2} bg={slot.isBooked ? "red.100" : "green.100"} cursor={slot.isBooked ? "not-allowed" : "pointer"} onClick={() => !slot.isBooked && bookTimeSlot(index)}>
+                {slot.time} {slot.isBooked ? "(Booked)" : "(Available)"}
+                {!slot.isBooked && (
+                  <Button ml={4} colorScheme="teal" size="sm">
+                    Book Now
+                  </Button>
+                )}
+              </Box>
+            ))}
           </Stack>
         </Box>
       </VStack>
