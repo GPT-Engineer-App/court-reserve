@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { addMonths, addDays, subMonths, subDays } from "date-fns";
-import CalendarHeader from "@/components/Calendar/CalendarHeader";
-import MonthView from "@/components/Calendar/MonthView";
-import DayView from "@/components/Calendar/DayView";
+import CalendarHeader from "../components/Calendar/CalendarHeader";
+import MonthView from "../components/Calendar/MonthView";
+import DayView from "../components/Calendar/DayView";
 
 const Index = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
