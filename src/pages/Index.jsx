@@ -1,56 +1,66 @@
-import { Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Stack, Text, useToast, VStack, Image } from "@chakra-ui/react";
-import { FaCalendarAlt, FaMapMarkerAlt, FaUser } from "react-icons/fa";
-
 import { useState } from "react";
+import { addMonths, addDays, subMonths, subDays } from "date-fns";
+import CalendarHeader from "@/components/Calendar/CalendarHeader";
+import MonthView from "@/components/Calendar/MonthView";
+import DayView from "@/components/Calendar/DayView";
 
 const Index = () => {
-  const [bookingName, setBookingName] = useState("");
-  const toast = useToast();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState("month");
+  
+  // Sample events - in a real app, this would come from an API or database
+  const [events] = useState([
+    { id: 1, title: "Team Meeting", date: new Date(2024, 3, 15, 10) },
+    { id: 2, title: "Lunch with Client", date: new Date(2024, 3, 15, 12) },
+    { id: 3, title: "Project Review", date: new Date(2024, 3, 16, 14) },
+    { id: 4, title: "Doctor Appointment", date: new Date(2024, 3, 17, 9) },
+  ]);
 
-  const handleBooking = (name) => {
-    // This is a placeholder for the booking logic
-    toast({
-      title: `Booking Confirmed for ${bookingName}!`,
-      description: "Your tennis court has been booked.",
-      status: "success",
-      duration: 9000,
-      isClosable: true,
-    });
+  const handlePrevious = () => {
+    if (currentView === "month") {
+      setCurrentDate(subMonths(currentDate, 1));
+    } else {
+      setCurrentDate(subDays(currentDate, 1));
+    }
+  };
+
+  const handleNext = () => {
+    if (currentView === "month") {
+      setCurrentDate(addMonths(currentDate, 1));
+    } else {
+      setCurrentDate(addDays(currentDate, 1));
+    }
+  };
+
+  const handleDateSelect = (date) => {
+    setCurrentDate(date);
+    setCurrentView("day");
   };
 
   return (
-    <Container maxW="container.xl" p={4}>
-      <VStack spacing={8} align="stretch">
-        <Heading as="h1" size="xl" textAlign="center">
-          Tennis Court Booking
-        </Heading>
-
-        <Flex direction={{ base: "column", md: "row" }} align="center" justify="space-between">
-          <Box flex="1" mr={{ base: 0, md: 4 }} mb={{ base: 4, md: 0 }}>
-            <Image borderRadius="md" src="https://images.unsplash.com/photo-1551773188-0801da12ddae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHx0ZW5uaXMlMjBjb3VydHxlbnwwfHx8fDE3MDk4NDQ3MTl8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="Tennis Court" />
-          </Box>
-          <Box flex="2">
-            <Stack spacing={4} as="form">
-              <FormControl id="name" isRequired>
-                <FormLabel>Name</FormLabel>
-                <Input placeholder="John Doe" type="text" icon={<FaUser />} value={bookingName} onChange={(e) => setBookingName(e.target.value)} />
-              </FormControl>
-              <FormControl id="date" isRequired>
-                <FormLabel>Date</FormLabel>
-                <Input type="date" icon={<FaCalendarAlt />} />
-              </FormControl>
-              <FormControl id="location" isRequired>
-                <FormLabel>Location</FormLabel>
-                <Input placeholder="123 Tennis Court St." type="text" icon={<FaMapMarkerAlt />} />
-              </FormControl>
-              <Button colorScheme="teal" size="lg" onClick={() => handleBooking(bookingName)}>
-                Book Now
-              </Button>
-            </Stack>
-          </Box>
-        </Flex>
-      </VStack>
-    </Container>
+    <div className="min-h-screen flex flex-col bg-background">
+      <CalendarHeader
+        currentDate={currentDate}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        onViewChange={setCurrentView}
+        currentView={currentView}
+      />
+      <div className="flex-1 flex flex-col">
+        {currentView === "month" ? (
+          <MonthView
+            currentDate={currentDate}
+            events={events}
+            onSelectDate={handleDateSelect}
+          />
+        ) : (
+          <DayView
+            currentDate={currentDate}
+            events={events}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
