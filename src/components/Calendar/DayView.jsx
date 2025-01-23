@@ -11,20 +11,24 @@ const DayView = ({ currentDate, events }) => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto bg-white">
       {hours.map((hour) => {
         const hourEvents = getEventsForHour(hour);
         
         return (
-          <div key={hour.toString()} className="flex border-t min-h-[60px]">
-            <div className="w-20 p-2 text-sm text-gray-500 text-right">
+          <div key={hour.toString()} className="flex border-b min-h-[48px] group hover:bg-gray-50">
+            <div className="w-20 py-2 px-3 text-xs text-gray-500 text-right group-hover:text-blue-600">
               {format(hour, 'h a')}
             </div>
-            <div className="flex-1 p-2">
+            <div className="flex-1 border-l">
               {hourEvents.map((event, idx) => (
                 <div
                   key={event.id}
-                  className={`text-sm p-2 mb-1 rounded text-white bg-calendar-event${(idx % 4) + 1}`}
+                  className={`text-sm p-2 m-1 rounded text-white cursor-pointer transition-transform hover:scale-[1.02]
+                    ${idx === 0 ? 'bg-calendar-event1' : ''}
+                    ${idx === 1 ? 'bg-calendar-event2' : ''}
+                    ${idx === 2 ? 'bg-calendar-event3' : ''}
+                    ${idx === 3 ? 'bg-calendar-event4' : ''}`}
                 >
                   {event.title}
                 </div>
